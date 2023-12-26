@@ -8,6 +8,21 @@ import openai
 from .models import article
 from lastmileai import LastMile
 from django.core.serializers import serialize
+import pinecone
+from langchain.vectorstores import Pinecone
+from langchain.embeddings import HuggingFaceEmbeddings
+
+
+
+
+
+
+pinecone.init(      
+	api_key='0f974a83-d911-40bc-916d-8c3356131b3a',      
+	environment='gcp-starter'      
+)      
+index = pinecone.Index('search')
+embeddings = HuggingFaceEmbeddings(model_name="bert-base-uncased")
 # import environ
 # Create your views here.
 # env = environ.Env()
@@ -36,6 +51,7 @@ def create_story(request):
         categories = t['categories'].split(',')
         story = article(title = t['title'], content = t['content'], categories = categories, author = request.user.user)
         story.save()
+        docsearch = Pinecone.from_texts(t['title'], embeddings, index_name="search")
 
         return JsonResponse({
             "message":"story created successfully"
