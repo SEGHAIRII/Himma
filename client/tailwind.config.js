@@ -7,13 +7,16 @@ export default {
   theme: {
     extend: {
       fontFamily:{
-        roboto:['Roboto']
+        roboto:['Roboto'],
+        rubik:['Rubik']
       },
       colors:{
         'main-blue':'#05A8C6',
         'main-yellow':'#F5E29D',
         'light-blue':'#05CDF2',
-        'dark-yellow':'#E3CD7D'
+        'dark-yellow':'#E3CD7D',
+        'main-gray':'#D9D9D9',
+        'dark-blue':'#089AB5'
       }
     },
   },

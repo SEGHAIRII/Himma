@@ -1,11 +1,19 @@
 import React, { useState } from 'react'
 import logo_white from '../assets/logo-white.svg'
 import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { loginUser } from '../redux/features/userSlice'
 
 const SignIn = () => {
 
     const [email,setEmail]=useState('')
     const [password,setPassword]=useState('')
+    const dispatch=useDispatch()
+
+    const handleLogin=(e)=>{
+        e.preventDefault()
+        dispatch(loginUser({username:'amor'}))
+    }
   return (
     <div className='h-screen w-full relative font-roboto'>
         <div className='w-full h-1/2 bg-gradient-to-r from-30% from-main-yellow to-main-blue grid grid-rows-4 place-items-center'>
@@ -21,7 +29,7 @@ const SignIn = () => {
                 <div className=' w-4/5 md:w-3/5 flex justify-end font-semibold text-main-blue'><p><Link to='./../resetpassword'>Forgot Password?</Link></p></div>
             </div>
             <div className=' w-4/5 md:w-3/5 flex justify-between'>
-                <button className='w-[35%] md:w-[25%] rounded-lg h-12 bg-gradient-to-r from-light-blue to-main-blue'>
+                <button onClick={handleLogin} className='w-[35%] md:w-[25%] rounded-lg h-12 bg-gradient-to-r from-light-blue to-main-blue'>
                     <p className='font-semibold text-lg text-white'>LOGIN</p>
                 </button>
                 <button className='uppercase w-[35%] md:w-[25%] rounded-lg h-12 bg-gradient-to-r from-main-yellow to-dark-yellow'>
