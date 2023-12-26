@@ -1,18 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Navbar from '../components/Navbar'
 import StoryCard from '../components/StoryCard'
+import handleSpeaking from '../utils/handleSpeaking'
+import storyData from '../dummy/StoryData'
 
 const Search = () => {
-  return (
-    <div>
-        <Navbar></Navbar>
-        <div className=' flex flex-col items-center justify-center'>
-            <StoryCard user={{fullname:'Amor MOHAMED'}} title='The application of artificial intelligence in clinical diagnosis' 
-            details='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum'
-            topics={['artificial intelligence','Sports']}
-            date='September 2023'
-            likes={24}
-            ></StoryCard>
+    
+    return (
+    <div className=' relative pb-12 '>
+        <Navbar ></Navbar>
+        <div className='pt-28 flex flex-col space-y-12 items-center justify-center'>
+        {storyData.map((story) => (
+        <StoryCard
+          key={story.id}
+          id={story.id}
+          user={story.user}
+          title={story.title}
+          details={story.details}
+          topics={story.topics}
+          date={story.date}
+          likes={story.likes}
+        />
+      ))}
         </div>
     </div>
   )

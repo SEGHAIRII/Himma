@@ -1,5 +1,4 @@
 Django==4.2.7
 lastmileai==0.0.2
 openai==1.6.1
-Requests==2.31.0
 transformers==4.36.2

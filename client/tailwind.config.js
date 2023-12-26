@@ -15,7 +15,8 @@ export default {
         'main-yellow':'#F5E29D',
         'light-blue':'#05CDF2',
         'dark-yellow':'#E3CD7D',
-        'main-gray':'#D9D9D9'
+        'main-gray':'#D9D9D9',
+        'dark-blue':'#089AB5'
       }
     },
   },
