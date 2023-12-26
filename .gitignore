@@ -5,3 +5,5 @@
 *.bmp
 *.tiff
 *.webp
+
+server/models/*

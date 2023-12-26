@@ -6,6 +6,7 @@ import requests
 from django.conf import settings
 import openai
 from .models import article
+from lastmileai import LastMile
 # Create your views here.
 
 
