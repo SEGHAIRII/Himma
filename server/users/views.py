@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseForbidden, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseNotFound, JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as djlogin, logout as djlogout
 from operator import itemgetter
@@ -15,17 +15,25 @@ import secrets
 
 def register(request):
     if request.method == 'POST':
-        password ,first_name, last_name, email, gender = itemgetter('password', 'first_name', 'last_name', 'email', 'gender')(json.loads(request.body))
+        password ,fullname, email= itemgetter('password', 'fullname', 'email')(json.loads(request.body))
+        full_name = fullname.split()
+        first_name = full_name[0]
+        last_name = full_name[1]
         utilisateur = authenticate(username = email, password = password)
         if utilisateur is not None:
-            return HttpResponseForbidden("Email Already exists")
+            return JsonResponse({
+                "error":"user already found"
+            })
         else:
             djuser = User.objects.create_user(username = email, email = email, password = password, first_name = first_name, last_name = last_name)
-            utilisateur = user(djuser = djuser, gender = gender)
+            utilisateur = user(djuser = djuser)
             utilisateur.save()
             djlogin(request, djuser)
             
-            return HttpResponse("created user successefully")
+            return JsonResponse({
+                "id":djuser.id,
+                "full_name": f'{djuser.first_name} {djuser.last_name}'
+            })
 
 
 def login(request):
@@ -34,15 +42,20 @@ def login(request):
         user = authenticate(username = email, password = password)
         if user is not None :
             djlogin(request, user)
-            return HttpResponse("user logged in successfully")
+            return JsonResponse({
+                 "id":djuser.id,
+                "full_name": f'{djuser.first_name} {djuser.last_name}'
+            })
         else:
-            return HttpResponseNotFound("user not found")
+            return JsonResponse({
+                "error":"user not found"
+            })
         
         
 def logout(request):
     if request.method == 'POST':
         djlogout(request)
-        return HttpResponse("logout successfully")
+        return JsonResponse({"message":"logout successfully"})
 
 
 @login_required
@@ -50,7 +63,7 @@ def deleteAccount(request):
     if request.method == 'DELETE':
         user = request.user
         user.delete()
-        return HttpResponse("user removed successefully")
+        return JsonResponse({"message":"user removed successefully"})
     
 
 
