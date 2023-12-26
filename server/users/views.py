@@ -66,7 +66,7 @@ def reset_password(request):
             uid = utilisateur.id
             cache.set(f'{uid}', token)
             mail = f'https://localhost:5137/password-reset-confirm/{uid}/{token}'
-            send_mail("RESET PASSWORD", "Click this link to reset your password", "raoufseghairi@gmail.com", [email])
+            send_mail("RESET PASSWORD", f"Click this link to reset your password , {mail}", "raoufseghairi@gmail.com", [email])
             return HttpResponse("waiting for email confirmation")
     
 def reset_password_confirm(request):

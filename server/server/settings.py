@@ -138,7 +138,7 @@ EMAIL_USE_TLS = False
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'raoufseghairi@gmail.com'
-EMAIL_HOST_PASSWORD = 'Cenationyes1'
+EMAIL_HOST_PASSWORD = 'ciidptlhulxdinur'
 
 
 
