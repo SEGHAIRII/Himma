@@ -16,6 +16,7 @@ const Navbar = () => {
   const { transcript, toggleSpeechRecognition } = handleSpeaking();
   useEffect(()=>{
     setSearch(transcript)
+    console.log(transcript)
   },[transcript])
 
 
@@ -46,13 +47,13 @@ const Navbar = () => {
   }
 
   return (
-    <nav className='font-roboto fixed bg-white z-20 flex items-center justify-between h-20 w-full px-12 py-2'>
+    <nav className='font-roboto fixed bg-white z-20 flex items-center justify-between h-20 w-full px-4 md:px-12 py-2'>
         <div className=' flex justify-center items-baseline'>
           <Link to='/'>
-          <img className=' w-12 mr-6' src={logo} alt="" />
+          <img className=' w-6 md:w-12 md:mr-6' src={logo} alt="" />
           </Link>
         </div>
-        <div className='flex items-center space-x-4 justify-between w-2/5'>
+        <div className='flex items-center space-x-4 justify-between md:w-2/5'>
           <div className=' px-2 flex flex-1 items-center justify-around h-12 bg-main-gray bg-opacity-30 rounded-2xl'>
             <SearchIcon></SearchIcon>
             <input placeholder='Search' onChange={e=>setSearch(e.target.value)} value={Search} type="text" name='search'  className=' w-[80%] bg-transparent outline-none' />
@@ -61,7 +62,7 @@ const Navbar = () => {
         </div>
         <div className='relative'>
 
-        <div onClick={()=>setShowDropdown(prev=>!prev)} className=' h-12 w-12 outline outline-2 outline-main-blue bg-main-yellow rounded-full cursor-pointer'>
+        <div onClick={()=>setShowDropdown(prev=>!prev)} className=' md:h-12 md:w-12 w-6 h-6 outline outline-2 outline-main-blue bg-main-yellow rounded-full cursor-pointer'>
         </div>
           <ProfileDropdown></ProfileDropdown>
         </div>
