@@ -5,6 +5,7 @@ import json
 import requests
 from django.conf import settings
 import openai
+from .models import article
 # Create your views here.
 
 
@@ -29,6 +30,7 @@ def create_story(request):
             max_tokens=100
         )
         generated_text = response.choices[0].text.strip()
-        return HttpResponse(generated_text)
+        story = article(content = generated_text, title = "")
+        return HttpResponse()
     
     
