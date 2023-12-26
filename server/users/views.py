@@ -6,19 +6,21 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from .models import user
+from django.core.mail import send_mail
+from django.core.cache import cache
+import secrets
 # Create your views here.
 
 
 
-@csrf_exempt    
 def register(request):
     if request.method == 'POST':
-        username, password ,first_name, last_name, email, gender = itemgetter('username','password', 'first_name', 'last_name', 'email', 'gender')(json.loads(request.body))
-        utilisateur = authenticate(username = username, password = password)
+        password ,first_name, last_name, email, gender = itemgetter('password', 'first_name', 'last_name', 'email', 'gender')(json.loads(request.body))
+        utilisateur = authenticate(username = email, password = password)
         if utilisateur is not None:
             return HttpResponseForbidden("Email Already exists")
         else:
-            djuser = User.objects.create_user(username = username, email = email, password = password, first_name = first_name, last_name = last_name)
+            djuser = User.objects.create_user(username = email, email = email, password = password, first_name = first_name, last_name = last_name)
             utilisateur = user(djuser = djuser, gender = gender)
             utilisateur.save()
             djlogin(request, djuser)
@@ -26,11 +28,10 @@ def register(request):
             return HttpResponse("created user successefully")
 
 
-@csrf_exempt
 def login(request):
     if request.method == 'POST':
-        username, password = itemgetter('username', 'password')(json.loads(request.body))
-        user = authenticate(username = username, password = password)
+        email, password = itemgetter('email', 'password')(json.loads(request.body))
+        user = authenticate(username = email, password = password)
         if user is not None :
             djlogin(request, user)
             return HttpResponse("user logged in successfully")
@@ -38,14 +39,12 @@ def login(request):
             return HttpResponseNotFound("user not found")
         
         
-@csrf_exempt    
 def logout(request):
     if request.method == 'POST':
         djlogout(request)
         return HttpResponse("logout successfully")
 
 
-@csrf_exempt
 @login_required
 def deleteAccount(request):
     if request.method == 'DELETE':
@@ -53,3 +52,32 @@ def deleteAccount(request):
         user.delete()
         return HttpResponse("user removed successefully")
     
+
+
+
+def reset_password(request):
+    if(request.method == 'POST'):
+        email = itemgetter('email')(json.loads(request.body))
+        utilisateur = User.objects.get(email = email)
+        if utilisateur is None:
+            return HttpResponseNotFound("User not found")
+        else:
+            token = secrets.token_hex(32 // 2)
+            uid = utilisateur.id
+            cache.set(f'{uid}', token)
+            mail = f'https://localhost:5137/password-reset-confirm/{uid}/{token}'
+            send_mail("RESET PASSWORD", "Click this link to reset your password", "raoufseghairi@gmail.com", [email])
+            return HttpResponse("waiting for email confirmation")
+    
+def reset_password_confirm(request):
+    if(request.method == 'POST'):
+        password, uid, token = itemgetter('email')(json.loads(request.body))
+        t = cache.get(f'{uid}')
+        if t == token:
+            utilisateur = User.objects.get(id = uid)
+            utilisateur.password = password
+            utilisateur.save()
+            djlogin(request, utilisateur)
+            return HttpResponse("password reset successfully")
+        else:
+            return HttpResponseForbidden("wrong token")
