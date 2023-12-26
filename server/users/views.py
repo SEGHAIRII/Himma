@@ -39,9 +39,9 @@ def register(request):
 def login(request):
     if request.method == 'POST':
         email, password = itemgetter('email', 'password')(json.loads(request.body))
-        user = authenticate(username = email, password = password)
-        if user is not None :
-            djlogin(request, user)
+        djuser = authenticate(username = email, password = password)
+        if djuser is not None :
+            djlogin(request, djuser)
             return JsonResponse({
                  "id":djuser.id,
                 "full_name": f'{djuser.first_name} {djuser.last_name}'

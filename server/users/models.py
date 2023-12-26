@@ -15,8 +15,11 @@ class user(models.Model):
    
     
     djuser = models.OneToOneField(User, on_delete=models.CASCADE) 
-   
-
+    choices = [
+        ("MALE", "MALE"),
+        ("FEMALE", "FEMALE")
+    ]
+    gender = models.CharField(max_length=50, choices=choices, default = "MALE")
     interests = ArrayField(models.CharField(max_length=100, blank = True, null = True), null = True, default = list, blank = True)
     
     

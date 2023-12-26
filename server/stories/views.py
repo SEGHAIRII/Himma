@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseForbidden, HttpResponseNotFound
+from django.http import JsonResponse, HttpResponse, HttpResponseForbidden, HttpResponseNotFound
 from operator import itemgetter
 import json
 import requests
@@ -7,31 +7,47 @@ from django.conf import settings
 import openai
 from .models import article
 from lastmileai import LastMile
+from django.core.serializers import serialize
+# import environ
 # Create your views here.
+# env = environ.Env()
+# environ.Env.read_env()
 
 
 
-'''from transformers import pipeline, AutoTokenizer, AutoModelForSequenceClassification
 
-loaded_classifier = pipeline("sentiment-analysis", model="models/my_pipeline")
-
-def get_emotion(text):
-    return loaded_classifier(text)[0]['label'] 
-
-'''
 def create_story(request):
     if(request.method == "POST"):
-        openai.api_key = settings.OPENAI_API_KEY
-        text = itemgetter('text')(json.loads(request.body))
-        # emotion = get_emotion(text)
-        prompt = ""
-        '''response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=prompt,
-            max_tokens=100
-        )
-        generated_text = response.choices[0].text.strip()
-        story = article(content = generated_text, title = "")'''
-        return HttpResponse()
+        lastmile = LastMile(api_key="eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..ZVJHv-Fn1pWrgapT.cqAirZcHForo8aoDhP0u4gqffxNn_R_3vxhWUrPoDNOp2ONf_93zrbJw-93L8Jxx_9schlrgeKl_Etc4wnT7tvvpLrqPMuKAe1dc00p8iK-w4Ny-V4g-F_VSqvpBNojOnb1RbDQzMBwdCltJmA2chHD_zn3wv9DUN-7uONa69CwwHacJPW-BG8kNUs3x3ACj5movSsh8QIf5vCMkF-aXRpjBcB9gviplRN2rx17QcMgFozhIbtVpvCOH_BrIm_TNUEhBZDE54NxkC-fo7RcIwG6NLAkDvfAxxAw7lo0PApW600b58koOldM_VJk1FeENmn7dU3jj4J9TxPlZmkWlj55swROCvYfONh03e7DYsOmD1lCzjcLsla5PFWweG5q8VkXGdlF0aFAnow.ZcZbR7KpKyTrShp8e66dpQ")
+        promt = itemgetter('promt')(json.loads(request.body))
+        completion = lastmile.create_openai_chat_completion(
+             completion_params = {
+                "model": "gpt-4-1106-preview",
+                "messages": [
+                    {"role":"system", "content":'''you are a personal writer that helps people write medium like articles based on a sentence they enter, your task is to help them expres    s themselves by firstly identifying the sentiment in their sentence and then generating the corresponding article as if it was written by them, return the result in JSON fo    rmat with the following keys : title, content, categories without formatting the string'''},
+                    { "role": "user", "content": promt }
+                    ,]
+                ,}
+            )
+        x = completion['completionResponse']['choices'][0]['message']['content']
+        x = x.replace("```json","")
+        x = x.replace("```","")
+        t = json.loads(x)
+        categories = t['categories'].split(',')
+        story = article(title = t['title'], content = t['content'], categories = categories, author = request.user.user)
+        story.save()
+
+        return JsonResponse({
+            "message":"story created successfully"
+        })
     
+    
+
+    
+def get_home_stories(request):
+    if(request.method == 'GET'):
+        interests = request.user.user.interests
+        articles = article.objects.filter(categories__overlap=interests)
+        articles = list(articles.values())
+        return JsonResponse({"articles":articles})
     
