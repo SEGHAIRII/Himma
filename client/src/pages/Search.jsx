@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Navbar from '../components/Navbar'
 import StoryCard from '../components/StoryCard'
 import handleSpeaking from '../utils/handleSpeaking'
-import storyData from '../dummy/StoryData'
+import storyData from '../dummy/storyData'
 
 const Search = () => {
     

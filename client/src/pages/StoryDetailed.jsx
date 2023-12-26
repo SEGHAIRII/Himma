@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import { Link } from 'react-router-dom'
-import storyData from '../dummy/StoryData'
+import storyData from '../dummy/storyData'
 import StoryCardDetailed from '../components/StoryCardDetailed'
 import RecomendedCard from '../components/RecomendedCard'
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
