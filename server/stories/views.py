@@ -50,4 +50,9 @@ def get_home_stories(request):
         articles = article.objects.filter(categories__overlap=interests)
         articles = list(articles.values())
         return JsonResponse({"articles":articles})
+
+        
+        
+
+        
     
