@@ -1,20 +1,6 @@
-import pickle 
-from transformers import pipeline
+from transformers import pipeline, AutoTokenizer, AutoModelForSequenceClassification
 
-with open('./sentiment_analysis_model.pkl', 'rb') as f:
-    tokenizer ,model = pickle.load(f)
+loaded_classifier = pipeline("sentiment-analysis", model="my_pipeline")
 
-emotion = pipeline('sentiment-analysis', 
-                    model='arpanghoshal/EmoRoBERTa')
-
-emotion_labels = emotion("Thanks for using it.")
-print(emotion_labels)
 def get_emotion(text):
-    return emotion(text)[0]['label']
-
-
-# In[ ]:
-
-
-
-
+    return loaded_classifier(text)[0]['label'] 
