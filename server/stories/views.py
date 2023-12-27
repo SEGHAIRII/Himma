@@ -9,7 +9,8 @@ from .models import article
 from lastmileai import LastMile
 from django.core.serializers import serialize
 import pinecone
- from langchain.vectorstores import Pinecone
+import random
+'''from langchain.vectorstores import Pinecone
  from langchain.embeddings import HuggingFaceEmbeddings
 
 
@@ -22,7 +23,7 @@ pinecone.init(
 	environment='gcp-starter'      
 )      
 index = pinecone.Index('search')
-embeddings = HuggingFaceEmbeddings(model_name="bert-base-uncased")
+embeddings = HuggingFaceEmbeddings(model_name="bert-base-uncased")  '''
  #Create your views here.
 
 
@@ -58,16 +59,17 @@ def create_story(request):
     
 def get_home_stories(request):
     if(request.method == 'GET'):
-        interests = request.user.user.interests
-        articles = article.objects.filter(categories__overlap=interests)
+        articles = article.objects.all()
         articles = list(articles.values())
+        if (len(articles) > 5 ):
+            articles = random.sample(article, 5) 
         return JsonResponse({"articles":articles})
 
         
         
 
         
-def search_stories(request):
+'''def search_stories(request):
     if(request.method == 'GET'):
         query = request.body.text
         doc_result = embeddings.embed_documents([query])
@@ -79,3 +81,4 @@ def search_stories(request):
 
         
     
+'''

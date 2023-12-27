@@ -3,6 +3,9 @@ import logo_white from '../assets/logo-white.svg'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { loginUser } from '../redux/features/userSlice'
+import axios from 'axios'
+import {toast, ToastContainer} from 'react-toastify' 
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignIn = () => {
 
@@ -12,7 +15,14 @@ const SignIn = () => {
 
     const handleLogin=(e)=>{
         e.preventDefault()
-        dispatch(loginUser({username:'amor'}))
+        axios.post("http://localhost:8000/login", {"email":email, "password":password})
+        .then(response => {
+            console.log('Response:', response.data);
+    // Handle the response data as needed
+        })
+        .catch(error => {
+        toast.error('Error:', error);
+    })
     }
   return (
     <div className='h-screen w-full relative font-roboto'>
@@ -23,9 +33,9 @@ const SignIn = () => {
         </div>
         <div className='md:pt-8 pt-24  pb-4 shadow-lg flex flex-col items-center justify-around ring-offset-2 absolute w-4/5 md:w-3/5 h-3/5 bg-white top-1/2 left-1/2 inset-0 -translate-x-1/2 -translate-y-1/2 rounded-xl'>
             <h1 className=' font-bold uppercase text-2xl'>Log in</h1>
-            <input value={email} onChange={(e)=>setEmail(e.target.value)} name='email' placeholder='username' className=' capitalize text-lg placeholder:font-light outline-none border-[1.5px] border-main-blue w-4/5 md:w-3/5 h-12 2xl:h-16  px-4 ' type="email" />
+            <input value={email} onChange={(e)=>setEmail(e.target.value)} name='email' placeholder='username' className='  text-lg placeholder:font-light outline-none border-[1.5px] border-main-blue w-4/5 md:w-3/5 h-12 2xl:h-16  px-4 ' type="email" />
             <div className=' w-full flex flex-col items-center'>
-                <input value={password} onChange={(e)=>setPassword(e.target.value)} name='password' placeholder='password' className=' capitalize text-lg mb-2 placeholder:font-light outline-none border-[1.5px] border-main-blue w-4/5 md:w-3/5 h-12 2xl:h-16  px-4 ' type="password" />
+                <input value={password} onChange={(e)=>setPassword(e.target.value)} name='password' placeholder='password' className='  text-lg mb-2 placeholder:font-light outline-none border-[1.5px] border-main-blue w-4/5 md:w-3/5 h-12 2xl:h-16  px-4 ' type="password" />
                 <div className=' w-4/5 md:w-3/5 flex justify-end font-semibold text-main-blue'><p><Link to='./../resetpassword'>Forgot Password?</Link></p></div>
             </div>
             <div className=' w-4/5 md:w-3/5 flex justify-between'>

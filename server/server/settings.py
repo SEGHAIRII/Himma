@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-*ttq1#!qang@egzwlb=ie83mecgjw1vmu6pi@)+7r1)uva74*d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "users.apps.UsersConfig",
     "stories.apps.StoriesConfig",
-    "interactivity.apps.InteractivityConfig"
+    "interactivity.apps.InteractivityConfig",
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +50,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = "server.urls"
@@ -143,3 +145,5 @@ EMAIL_HOST_PASSWORD = 'ciidptlhulxdinur'
 
 
 OPENAI_API_KEY = 'YOUR_OPENAI_API_KEY'
+
+CORS_ALLOW_ALL_ORIGINS = True
