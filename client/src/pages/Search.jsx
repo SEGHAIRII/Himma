@@ -2,39 +2,23 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import StoryCard from '../components/StoryCard'
 import handleSpeaking from '../utils/handleSpeaking'
+import storyData from '../dummy/StoryData'
 import axios from 'axios'
 
 const Search = () => {
-  const[storyData,setStoryData]=useState([])
-  const fetchData = async() => {
-      axios.get(`http://localhost:8000/stories`,{
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(response => {
-        // Handle the response data
-        console.log('Data:', response.data);
 
-        setStoryData(
-          response.data.articles.map((s)=>({
-            id: s.id,
-            user: s.author_id,
-            title: s.title,
-            details: s.content,
-            topics: s.categories,
-            date: s.creation_date.split(8),
-            likes: s.likes,
-          }))
-        )
-      })
-      .catch(error => {
-        // Handle errors
-        console.error('Error fetching data:', error.message);
-      });
-    };
     useEffect(()=>{
+      const fetchData = async() => {
+        axios.get(`http://localhost:8000/stories`)
+          .then(response => {
+            // Handle the response data
+            console.log('Data:', response.data);
+          })
+          .catch(error => {
+            // Handle errors
+            console.error('Error fetching data:', error.message);
+          });
+      };
       fetchData()
     },[])
 
@@ -44,7 +28,6 @@ const Search = () => {
         <div className='pt-28 flex flex-col space-y-12 items-center justify-center'>
         {storyData.map((story) => (
         <StoryCard
-          storyData={storyData}
           key={story.id}
           id={story.id}
           user={story.user}
