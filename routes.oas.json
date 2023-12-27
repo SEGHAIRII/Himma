@@ -1,0 +1,130 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "My Zuplo API"
+  },
+  "paths": {
+    "/register": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "post": {
+        "summary": "Create a new user",
+        "description": "Lorem ipsum dolor sit amet, **consectetur adipiscing** elit, sed do `eiusmod tempor` incididunt ut labore et dolore magna aliqua.",
+        "x-zuplo-route": {
+          "corsPolicy": "none",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://localhost:8000/register"
+            }
+          },
+          "policies": {
+            "inbound": [
+              "validate-json-schema-inbound"
+            ]
+          }
+        },
+        "operationId": "73a5a780-567c-45e4-99fa-7f401d87a0d7"
+      }
+    },
+    "/login": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "post": {
+        "summary": "Login",
+        "description": "Lorem ipsum dolor sit amet, **consectetur adipiscing** elit, sed do `eiusmod tempor` incididunt ut labore et dolore magna aliqua.",
+        "x-zuplo-route": {
+          "corsPolicy": "none",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://localhost:8000/login"
+            }
+          },
+          "policies": {
+            "inbound": [
+              "validate-json-schema-inbound-1"
+            ]
+          }
+        },
+        "operationId": "d14d85d7-5d7c-4470-8edb-25babf40d43b"
+      }
+    },
+    "/logout": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "post": {
+        "summary": "logout",
+        "description": "Lorem ipsum dolor sit amet, **consectetur adipiscing** elit, sed do `eiusmod tempor` incididunt ut labore et dolore magna aliqua.",
+        "x-zuplo-route": {
+          "corsPolicy": "none",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://localhost:8000/logout"
+            }
+          },
+          "policies": {
+            "inbound": []
+          }
+        },
+        "operationId": "6557f652-060b-43c3-a942-777f92d73653"
+      }
+    },
+    "/stories/createstory": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "post": {
+        "summary": "create a new article",
+        "description": "Lorem ipsum dolor sit amet, **consectetur adipiscing** elit, sed do `eiusmod tempor` incididunt ut labore et dolore magna aliqua.",
+        "x-zuplo-route": {
+          "corsPolicy": "none",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://localhost:8000/stories/createstory"
+            }
+          },
+          "policies": {
+            "inbound": [
+              "set-body-inbound"
+            ]
+          }
+        },
+        "operationId": "1ae51bc4-b632-47b6-94b4-061578ceb2b7"
+      }
+    },
+    "/stories": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "get": {
+        "summary": "get suggested articles",
+        "description": "Lorem ipsum dolor sit amet, **consectetur adipiscing** elit, sed do `eiusmod tempor` incididunt ut labore et dolore magna aliqua.",
+        "x-zuplo-route": {
+          "corsPolicy": "none",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://localhost:8000/stories"
+            }
+          },
+          "policies": {
+            "inbound": []
+          }
+        },
+        "operationId": "d2b7c3af-9740-4f0d-902b-2f5937fdbc89"
+      }
+    }
+  }
+}
