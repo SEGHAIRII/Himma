@@ -11,22 +11,33 @@ import ResetPassword from './pages/ResetPassword'
 import Search from './pages/Search'
 import { useSelector } from 'react-redux'
 import StoryDetailed from './pages/StoryDetailed';
+import { Navigate } from 'react-router-dom';
+import axios from 'axios';
 function App() {
 
   const user =useSelector(state=>state.data.user.user)
   console.log(user)
-  useEffect(()=>{
-
-  },[])
-
+  
   return (
     <BrowserRouter>
       <Routes>
-        <Route index element={user==null?Search():Home()}></Route>
-        <Route path='login' element={SignIn()} ></Route>
-        <Route path='story/:id' element={<StoryDetailed></StoryDetailed>}></Route>
-        <Route path='signup' element={SignUp()} ></Route>
-        <Route path='resetpassword' element={ResetPassword()} ></Route>
+      <Route index element={user != null ? <Search /> : <Home />}></Route>
+        {
+          !user&&
+          <>
+            <Route path='login' element={<SignIn />} ></Route>
+            <Route path='signup' element={<SignUp />} ></Route>
+            <Route path='resetpassword' element={<ResetPassword />} ></Route>
+          </>
+
+        }
+        {
+          user&&
+          <>
+            <Route path='story/:id' element={<StoryDetailed></StoryDetailed>}></Route>
+          </>
+        }
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
   )

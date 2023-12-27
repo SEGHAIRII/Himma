@@ -8,6 +8,7 @@ import openai
 from .models import article
 from lastmileai import LastMile
 from django.core.serializers import serialize
+import random
 # import pinecone
 '''
 from langchain.vectorstores import Pinecone
@@ -56,7 +57,7 @@ def create_story(request):
         #docsearch = Pinecone.from_texts(t['title'], embeddings, index_name="search")
 
         return JsonResponse({
-            "message":"story created successfully"
+            'article':story
         })
     
     
@@ -64,9 +65,12 @@ def create_story(request):
     
 def get_home_stories(request):
     if(request.method == 'GET'):
+        print({'USER' : request.user})
         interests = request.user.user.interests
-        articles = article.objects.filter(categories__overlap=interests)
+        articles = article.objects.all()
         articles = list(articles.values())
+        if (len(articles )> 5):
+            articles = random.sample(articles, 5)
         return JsonResponse({"articles":articles})
 
         

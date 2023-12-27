@@ -35,6 +35,9 @@ def register(request):
                 "full_name": f'{djuser.first_name} {djuser.last_name}'
             })
 
+    else:
+        return JsonResponse({"message": "wrong method"})
+
 
 def login(request):
     if request.method == 'POST':
@@ -48,8 +51,8 @@ def login(request):
             })
         else:
             return JsonResponse({
-                "error":"user not found"
-            })
+                "error":"wrong password"},
+                status=400)
         
         
 def logout(request):
@@ -84,7 +87,7 @@ def reset_password(request):
     
 def reset_password_confirm(request):
     if(request.method == 'POST'):
-        password, uid, token = itemgetter('email')(json.loads(request.body))
+        password, uid, token = itemgetter('email')(json.loads(request.GET))
         t = cache.get(f'{uid}')
         if t == token:
             utilisateur = User.objects.get(id = uid)
@@ -94,3 +97,24 @@ def reset_password_confirm(request):
             return HttpResponse("password reset successfully")
         else:
             return HttpResponseForbidden("wrong token")
+        
+
+
+
+def get_user(request, user_id):
+    if (request.method == 'GET'):
+        try:
+            id_1 = ord(user_id) - ord('0')
+            print(id)
+            utilisateur = user.objects.filter(id = id_1)
+            print(utilisateur)
+        except:
+            utilisateur = ''
+            print(id)
+        finally:
+            return JsonResponse({
+            'user':utilisateur
+        }, safe=False)
+    else:
+        return JsonResponse({"message" : "cant access this"}, status = 404)
+    

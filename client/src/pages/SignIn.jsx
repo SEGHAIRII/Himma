@@ -3,19 +3,32 @@ import logo_white from '../assets/logo-white.svg'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { loginUser } from '../redux/features/userSlice'
+import axios from 'axios'
+import {toast, ToastContainer} from 'react-toastify' 
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignIn = () => {
 
     const [email,setEmail]=useState('')
     const [password,setPassword]=useState('')
     const dispatch=useDispatch()
+    axios.defaults.withCredentials = true; // Include credentials (cookies) in the request
+
 
     const handleLogin=(e)=>{
         e.preventDefault()
-        dispatch(loginUser({username:'amor'}))
+        axios.post("http://localhost:8000/login", {"email":email, "password":password})
+        .then(response => {
+            console.log('Response:', response.data);
+            dispatch(loginUser(response.data))
+        })
+        .catch(error => {
+        toast.error(`Error:${error.response.data.error}`);
+    })
     }
   return (
     <div className='h-screen w-full relative font-roboto'>
+        <ToastContainer></ToastContainer>
         <div className='w-full h-1/2 bg-gradient-to-r from-30% from-main-yellow to-main-blue grid grid-rows-4 place-items-center'>
             <div className=' flex justify-center items-center row-span-1 place-items-center w-full'>
                 <img src={logo_white} alt="" className=' w-14 mt-12 '/>
@@ -23,9 +36,9 @@ const SignIn = () => {
         </div>
         <div className='md:pt-8 pt-24  pb-4 shadow-lg flex flex-col items-center justify-around ring-offset-2 absolute w-4/5 md:w-3/5 h-3/5 bg-white top-1/2 left-1/2 inset-0 -translate-x-1/2 -translate-y-1/2 rounded-xl'>
             <h1 className=' font-bold uppercase text-2xl'>Log in</h1>
-            <input value={email} onChange={(e)=>setEmail(e.target.value)} name='email' placeholder='username' className=' capitalize text-lg placeholder:font-light outline-none border-[1.5px] border-main-blue w-4/5 md:w-3/5 h-12 2xl:h-16  px-4 ' type="email" />
+            <input value={email} onChange={(e)=>setEmail(e.target.value)} name='email' placeholder='username' className='  text-lg placeholder:font-light outline-none border-[1.5px] border-main-blue w-4/5 md:w-3/5 h-12 2xl:h-16  px-4 ' type="email" />
             <div className=' w-full flex flex-col items-center'>
-                <input value={password} onChange={(e)=>setPassword(e.target.value)} name='password' placeholder='password' className=' capitalize text-lg mb-2 placeholder:font-light outline-none border-[1.5px] border-main-blue w-4/5 md:w-3/5 h-12 2xl:h-16  px-4 ' type="password" />
+                <input value={password} onChange={(e)=>setPassword(e.target.value)} name='password' placeholder='password' className='  text-lg mb-2 placeholder:font-light outline-none border-[1.5px] border-main-blue w-4/5 md:w-3/5 h-12 2xl:h-16  px-4 ' type="password" />
                 <div className=' w-4/5 md:w-3/5 flex justify-end font-semibold text-main-blue'><p><Link to='./../resetpassword'>Forgot Password?</Link></p></div>
             </div>
             <div className=' w-4/5 md:w-3/5 flex justify-between'>

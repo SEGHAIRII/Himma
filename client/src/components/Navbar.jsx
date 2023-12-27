@@ -8,16 +8,29 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Link } from 'react-router-dom';
 import handleSpeaking from '../utils/handleSpeaking';
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '../redux/features/userSlice';
+import axios from 'axios';
 
 const Navbar = () => {
   const [Search,setSearch]=useState('')
-
+  const dispatch=useDispatch()
   const [showDropdown,setShowDropdown]=useState(false)
   const { transcript, toggleSpeechRecognition } = handleSpeaking();
   useEffect(()=>{
     setSearch(transcript)
     console.log(transcript)
   },[transcript])
+
+  const handleLogout =(e)=>{
+    e.preventDefault()
+    
+    axios.post("http://localhost:8000/logout")
+        .then(() => {
+          dispatch(logoutUser())
+        })
+
+  }
 
 
 
@@ -36,10 +49,10 @@ const Navbar = () => {
             <SettingsIcon></SettingsIcon>
             <p>Settings</p>
           </Link>
-          <Link to='..' className='w-full px-8 flex py-2 space-x-8 hover:bg-dark-blue items-center duration-300'>
+          <button onClick={handleLogout} className='w-full px-8 flex py-2 space-x-8 hover:bg-dark-blue items-center duration-300'>
             <LogoutIcon></LogoutIcon>
             <p>Logout</p>
-          </Link>
+          </button>
         </div>
         
       </div> 
