@@ -35,6 +35,9 @@ def register(request):
                 "full_name": f'{djuser.first_name} {djuser.last_name}'
             })
 
+    else:
+        return JsonResponse({"message": "wrong method"})
+
 
 def login(request):
     if request.method == 'POST':

@@ -22,7 +22,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route index element={user==null?Search():Home()}></Route>
+        <Route index element={user!=null?Search():Home()}></Route>
         <Route path='login' element={SignIn()} ></Route>
         <Route path='story/:id' element={<StoryDetailed></StoryDetailed>}></Route>
         <Route path='signup' element={SignUp()} ></Route>
